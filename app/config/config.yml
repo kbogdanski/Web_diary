@@ -77,3 +77,14 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+#FOSUserBundle
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: WebDiaryBundle\Entity\User
+    registration:
+        form:
+            # type: AppBundle\Form\RegistrationType
+            # if you are using Symfony < 2.8 you should use the type name instead
+            type: app_user_registration
