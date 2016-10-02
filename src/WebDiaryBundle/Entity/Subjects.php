@@ -147,9 +147,9 @@ class Subjects
      * @param \DateTime $creationDate
      * @return Subjects
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate()
     {
-        $this->creationDate = $creationDate;
+        $this->creationDate = new \DateTime();
 
         return $this;
     }

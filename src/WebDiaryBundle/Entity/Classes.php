@@ -118,9 +118,9 @@ class Classes
      * @param \DateTime $creationDate
      * @return Classes
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate()
     {
-        $this->creationDate = $creationDate;
+        $this->creationDate = new \DateTime();
 
         return $this;
     }
