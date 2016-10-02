@@ -41,6 +41,19 @@ class Classes
      * @ORM\Column(name="creation_date", type="datetime")
      */
     private $creationDate;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="class")
+     */
+    private $students;
+    
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Subjects", inversedBy="classes")
+     * @ORM\JoinTable(name="class_subjects")
+     */
+    private $subjects;
 
 
     /**
@@ -120,5 +133,79 @@ class Classes
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->students = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subjects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add students
+     *
+     * @param \WebDiaryBundle\Entity\User $students
+     * @return Classes
+     */
+    public function addStudent(\WebDiaryBundle\Entity\User $students)
+    {
+        $this->students[] = $students;
+
+        return $this;
+    }
+
+    /**
+     * Remove students
+     *
+     * @param \WebDiaryBundle\Entity\User $students
+     */
+    public function removeStudent(\WebDiaryBundle\Entity\User $students)
+    {
+        $this->students->removeElement($students);
+    }
+
+    /**
+     * Get students
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStudents()
+    {
+        return $this->students;
+    }
+
+    /**
+     * Add subjects
+     *
+     * @param \WebDiaryBundle\Entity\Subjects $subjects
+     * @return Classes
+     */
+    public function addSubject(\WebDiaryBundle\Entity\Subjects $subjects)
+    {
+        $this->subjects[] = $subjects;
+
+        return $this;
+    }
+
+    /**
+     * Remove subjects
+     *
+     * @param \WebDiaryBundle\Entity\Subjects $subjects
+     */
+    public function removeSubject(\WebDiaryBundle\Entity\Subjects $subjects)
+    {
+        $this->subjects->removeElement($subjects);
+    }
+
+    /**
+     * Get subjects
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubjects()
+    {
+        return $this->subjects;
     }
 }

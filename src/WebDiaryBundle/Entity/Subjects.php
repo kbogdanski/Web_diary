@@ -49,6 +49,18 @@ class Subjects
      */
     private $creationDate;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Student_subjects", mappedBy="subject")
+     */
+    private $students;
+    
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Classes", mappedBy="subjects")
+     */
+    private $classes;
+    
 
     /**
      * Get id
@@ -150,5 +162,79 @@ class Subjects
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->students = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add students
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $students
+     * @return Subjects
+     */
+    public function addStudent(\WebDiaryBundle\Entity\Student_subjects $students)
+    {
+        $this->students[] = $students;
+
+        return $this;
+    }
+
+    /**
+     * Remove students
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $students
+     */
+    public function removeStudent(\WebDiaryBundle\Entity\Student_subjects $students)
+    {
+        $this->students->removeElement($students);
+    }
+
+    /**
+     * Get students
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStudents()
+    {
+        return $this->students;
+    }
+
+    /**
+     * Add classes
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classes
+     * @return Subjects
+     */
+    public function addClass(\WebDiaryBundle\Entity\Classes $classes)
+    {
+        $this->classes[] = $classes;
+
+        return $this;
+    }
+
+    /**
+     * Remove classes
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classes
+     */
+    public function removeClass(\WebDiaryBundle\Entity\Classes $classes)
+    {
+        $this->classes->removeElement($classes);
+    }
+
+    /**
+     * Get classes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClasses()
+    {
+        return $this->classes;
     }
 }

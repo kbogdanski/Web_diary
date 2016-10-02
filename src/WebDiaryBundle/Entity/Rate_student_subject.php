@@ -41,6 +41,20 @@ class Rate_student_subject
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Student_subjects", inversedBy="rates")
+     * @ORM\JoinColumn(name="student_subject_id", referencedColumnName="id")
+     */
+    private $studentSubject;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Description_rates", inversedBy="studentSubjectHasThisRate")
+     * @ORM\JoinColumn(name="description_rate_id", referencedColumnName="id")
+     */
+    private $descriptionRate;
 
 
     /**
@@ -120,5 +134,51 @@ class Rate_student_subject
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set studentSubject
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $studentSubject
+     * @return Rate_student_subject
+     */
+    public function setStudentSubject(\WebDiaryBundle\Entity\Student_subjects $studentSubject = null)
+    {
+        $this->studentSubject = $studentSubject;
+
+        return $this;
+    }
+
+    /**
+     * Get studentSubject
+     *
+     * @return \WebDiaryBundle\Entity\Student_subjects 
+     */
+    public function getStudentSubject()
+    {
+        return $this->studentSubject;
+    }
+
+    /**
+     * Set descriptionRate
+     *
+     * @param \WebDiaryBundle\Entity\Description_rates $descriptionRate
+     * @return Rate_student_subject
+     */
+    public function setDescriptionRate(\WebDiaryBundle\Entity\Description_rates $descriptionRate = null)
+    {
+        $this->descriptionRate = $descriptionRate;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionRate
+     *
+     * @return \WebDiaryBundle\Entity\Description_rates 
+     */
+    public function getDescriptionRate()
+    {
+        return $this->descriptionRate;
     }
 }

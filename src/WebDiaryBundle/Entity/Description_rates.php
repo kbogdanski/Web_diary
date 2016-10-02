@@ -35,6 +35,12 @@ class Description_rates
      */
     private $description;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Rate_student_subject", mappedBy="descriptionRate")
+     */
+    private $studentSubjectHasThisRate;
+    
 
     /**
      * Get id
@@ -90,5 +96,45 @@ class Description_rates
     public function getDescription()
     {
         return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->studentSubjectHasThisRate = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add studentSubjectHasThisRate
+     *
+     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate
+     * @return Description_rates
+     */
+    public function addStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
+    {
+        $this->studentSubjectHasThisRate[] = $studentSubjectHasThisRate;
+
+        return $this;
+    }
+
+    /**
+     * Remove studentSubjectHasThisRate
+     *
+     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate
+     */
+    public function removeStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
+    {
+        $this->studentSubjectHasThisRate->removeElement($studentSubjectHasThisRate);
+    }
+
+    /**
+     * Get studentSubjectHasThisRate
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStudentSubjectHasThisRate()
+    {
+        return $this->studentSubjectHasThisRate;
     }
 }
