@@ -44,6 +44,16 @@ class TeacherController extends Controller {
     
     
     /**
+     * @Route("/myClass")
+     * @Template()
+     */
+    public function showMyClassAction() {
+        
+    }
+
+    
+
+    /**
      * @Route("/addSubject")
      * @Template()
      */

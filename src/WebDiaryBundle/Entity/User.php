@@ -33,11 +33,17 @@ class User extends BaseUser {
      */
     private $class;
     
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Classes", mappedBy="teacher")
+     */
+    private $classTeacher;
 
 
     public function __construct() {
         parent::__construct();
         $this->subjects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classTeacher = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -94,5 +100,38 @@ class User extends BaseUser {
     public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * Add classTeacher
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classTeacher
+     * @return User
+     */
+    public function addClassTeacher(\WebDiaryBundle\Entity\Classes $classTeacher)
+    {
+        $this->classTeacher[] = $classTeacher;
+
+        return $this;
+    }
+
+    /**
+     * Remove classTeacher
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classTeacher
+     */
+    public function removeClassTeacher(\WebDiaryBundle\Entity\Classes $classTeacher)
+    {
+        $this->classTeacher->removeElement($classTeacher);
+    }
+
+    /**
+     * Get classTeacher
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClassTeacher()
+    {
+        return $this->classTeacher;
     }
 }

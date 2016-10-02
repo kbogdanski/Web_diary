@@ -48,6 +48,12 @@ class Classes
      */
     private $students;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="classTeacher")
+     * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
+     */
+    private $teacher;
+    
     
     /**
      * @ORM\ManyToMany(targetEntity="Subjects", inversedBy="classes")
@@ -207,5 +213,28 @@ class Classes
     public function getSubjects()
     {
         return $this->subjects;
+    }
+
+    /**
+     * Set teacher
+     *
+     * @param \WebDiaryBundle\Entity\User $teacher
+     * @return Classes
+     */
+    public function setTeacher(\WebDiaryBundle\Entity\User $teacher = null)
+    {
+        $this->teacher = $teacher;
+
+        return $this;
+    }
+
+    /**
+     * Get teacher
+     *
+     * @return \WebDiaryBundle\Entity\User 
+     */
+    public function getTeacher()
+    {
+        return $this->teacher;
     }
 }
