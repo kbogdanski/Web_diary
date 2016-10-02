@@ -27,6 +27,13 @@ class Student_subjects
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="school_year", type="string", length=9)
+     */
+    private $schoolYear ;
 
     /**
      * @var \DateTime
@@ -196,5 +203,28 @@ class Student_subjects
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Set schoolYear
+     *
+     * @param string $schoolYear
+     * @return Student_subjects
+     */
+    public function setSchoolYear($schoolYear)
+    {
+        $this->schoolYear = $schoolYear;
+
+        return $this;
+    }
+
+    /**
+     * Get schoolYear
+     *
+     * @return string 
+     */
+    public function getSchoolYear()
+    {
+        return $this->schoolYear;
     }
 }

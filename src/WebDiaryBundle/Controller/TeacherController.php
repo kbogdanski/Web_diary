@@ -42,6 +42,7 @@ class TeacherController extends Controller {
         return array('form' => $form->createView());
     }
     
+    
     /**
      * @Route("/addSubject")
      * @Template()
@@ -65,4 +66,14 @@ class TeacherController extends Controller {
         }
         return array('form' => $form->createView());
     }
+    
+    
+    /**
+     * @Route("/addSubjectToClass")
+     * @Template()
+     */
+    public function addSubjectToClassAction() {
+        
+    }
+    
 }
