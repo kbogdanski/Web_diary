@@ -6,11 +6,11 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: pl
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -85,6 +85,6 @@ fos_user:
     user_class: WebDiaryBundle\Entity\User
     registration:
         form:
-            # type: AppBundle\Form\RegistrationType
+            # type: WebDiaryBundle\Form\RegistrationType
             # if you are using Symfony < 2.8 you should use the type name instead
             type: app_user_registration
