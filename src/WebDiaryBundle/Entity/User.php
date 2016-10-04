@@ -37,13 +37,20 @@ class User extends BaseUser {
     /**
      * @ORM\OneToMany(targetEntity="Classes", mappedBy="teacher")
      */
-    private $classTeacher;
+    private $classTeachers;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Student_subjects", mappedBy="teacher")
+     */
+    private $studentSubjectTeachers;
 
 
     public function __construct() {
         parent::__construct();
         $this->subjects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->classTeacher = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classTeachers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->studentSubjectTeachers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -103,35 +110,91 @@ class User extends BaseUser {
     }
 
     /**
-     * Add classTeacher
+     * Add classTeachers
      *
-     * @param \WebDiaryBundle\Entity\Classes $classTeacher
+     * @param \WebDiaryBundle\Entity\Classes $classTeachers
      * @return User
      */
-    public function addClassTeacher(\WebDiaryBundle\Entity\Classes $classTeacher)
+    public function addClassTeachers(\WebDiaryBundle\Entity\Classes $classTeachers)
     {
-        $this->classTeacher[] = $classTeacher;
+        $this->classTeachers[] = $classTeachers;
 
         return $this;
     }
 
     /**
-     * Remove classTeacher
+     * Remove classTeachers
      *
-     * @param \WebDiaryBundle\Entity\Classes $classTeacher
+     * @param \WebDiaryBundle\Entity\Classes $classTeachers
      */
-    public function removeClassTeacher(\WebDiaryBundle\Entity\Classes $classTeacher)
+    public function removeClassTeachers(\WebDiaryBundle\Entity\Classes $classTeachers)
     {
-        $this->classTeacher->removeElement($classTeacher);
+        $this->classTeachers->removeElement($classTeachers);
     }
 
     /**
-     * Get classTeacher
+     * Get classTeachers
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getClassTeacher()
+    public function getClassTeachers()
     {
-        return $this->classTeacher;
+        return $this->classTeachers;
+    }
+
+    /**
+     * Add classTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classTeachers
+     * @return User
+     */
+    public function addClassTeacher(\WebDiaryBundle\Entity\Classes $classTeachers)
+    {
+        $this->classTeachers[] = $classTeachers;
+
+        return $this;
+    }
+
+    /**
+     * Remove classTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Classes $classTeachers
+     */
+    public function removeClassTeacher(\WebDiaryBundle\Entity\Classes $classTeachers)
+    {
+        $this->classTeachers->removeElement($classTeachers);
+    }
+
+    /**
+     * Add studentSubjectTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $studentSubjectTeachers
+     * @return User
+     */
+    public function addStudentSubjectTeacher(\WebDiaryBundle\Entity\Student_subjects $studentSubjectTeachers)
+    {
+        $this->studentSubjectTeachers[] = $studentSubjectTeachers;
+
+        return $this;
+    }
+
+    /**
+     * Remove studentSubjectTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $studentSubjectTeachers
+     */
+    public function removeStudentSubjectTeacher(\WebDiaryBundle\Entity\Student_subjects $studentSubjectTeachers)
+    {
+        $this->studentSubjectTeachers->removeElement($studentSubjectTeachers);
+    }
+
+    /**
+     * Get studentSubjectTeachers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStudentSubjectTeachers()
+    {
+        return $this->studentSubjectTeachers;
     }
 }

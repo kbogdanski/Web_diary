@@ -62,6 +62,13 @@ class Student_subjects
      */
     private $subject;
     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="studentSubjectTeachers")
+     * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
+     */
+    private $teacher;
+    
 
     /**
      * Get id
@@ -226,5 +233,28 @@ class Student_subjects
     public function getSchoolYear()
     {
         return $this->schoolYear;
+    }
+
+    /**
+     * Set teacher
+     *
+     * @param \WebDiaryBundle\Entity\User $teacher
+     * @return Student_subjects
+     */
+    public function setTeacher(\WebDiaryBundle\Entity\User $teacher = null)
+    {
+        $this->teacher = $teacher;
+
+        return $this;
+    }
+
+    /**
+     * Get teacher
+     *
+     * @return \WebDiaryBundle\Entity\User 
+     */
+    public function getTeacher()
+    {
+        return $this->teacher;
     }
 }
