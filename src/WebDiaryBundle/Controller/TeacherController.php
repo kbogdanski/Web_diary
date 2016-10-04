@@ -31,6 +31,8 @@ class TeacherController extends Controller {
             if ($form->isSubmitted() && $form->isValid()) {
                 $class = $form->getData();
                 $class->setCreationDate();
+                $user = $this->container->get('security.context')->getToken()->getUser();
+                $class->setTeacher($user);
                 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($class);
