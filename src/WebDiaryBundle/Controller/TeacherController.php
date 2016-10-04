@@ -12,14 +12,24 @@ use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
 
 
-/**
-* @Route("/teacher")
-*/
+
 
 class TeacherController extends Controller {
     
     /**
-     * @Route("/addClass")
+     * @Route("/")
+     * @Template()
+     */
+    public function indexAction() {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        
+        return array('user' => $user);
+    }
+
+    
+
+    /**
+     * @Route("/teacher/addClass")
      * @Template()
      */
     public function addClassAction(Request $req) {
@@ -46,7 +56,7 @@ class TeacherController extends Controller {
     
     
     /**
-     * @Route("/myClass")
+     * @Route("/teacher/myClass")
      * @Template()
      */
     public function showMyClassAction() {
@@ -56,7 +66,7 @@ class TeacherController extends Controller {
     
 
     /**
-     * @Route("/addSubject")
+     * @Route("/teacher/addSubject")
      * @Template()
      */
     public function addSubject(Request $req) {
@@ -81,7 +91,7 @@ class TeacherController extends Controller {
     
     
     /**
-     * @Route("/addSubjectToClass")
+     * @Route("/teacher/addSubjectToClass")
      * @Template()
      */
     public function addSubjectToClassAction() {
