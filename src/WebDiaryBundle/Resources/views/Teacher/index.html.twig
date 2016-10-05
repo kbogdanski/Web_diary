@@ -26,3 +26,10 @@
     <a>Dodaj ucznia do klasy</a><br>
         
 </div>
+    
+<div>
+    <h1>Klasy których jestem wychowawdzą</h1>
+    {% for myClass in myClasses %}
+        <p>Klasa {{myClass.title}} - Data utworzenia: {{myClass.creationDate.date}} - Notatka: {{myClass.description}}</p>
+    {%endfor%}
+</div>

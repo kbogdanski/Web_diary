@@ -23,7 +23,14 @@ class TeacherController extends Controller {
     public function indexAction() {
         $user = $this->container->get('security.context')->getToken()->getUser();
         
-        return array('user' => $user);
+        $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Classes');
+        $myClasses = $rep->findByTeacher($user->getId());
+        
+        if (!$myClasses) {
+            $myClasses = 'Brak klas dla których jesteś wychowawdzą';
+        }
+        
+        return array('user' => $user, 'myClasses' => $myClasses);
     }
 
     
