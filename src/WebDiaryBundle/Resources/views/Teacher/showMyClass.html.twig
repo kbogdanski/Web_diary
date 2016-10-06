@@ -1,0 +1,30 @@
+{# empty Twig template #}
+<h3>Widok szczegółowy klasy której użytkownik jest wychowawdzą</h3>
+
+{{ form_start(formSubjects) }}
+{{ form_label(formSubjects.subject) }}
+{{ form_widget(formSubjects.subject) }}
+{{ form_widget(formSubjects.save) }}
+{{ form_end(formSubjects) }}
+
+
+{{ form_start(formStudents) }}
+{{ form_label(formStudents.student) }}
+{{ form_widget(formStudents.student) }}
+{{ form_widget(formStudents.save) }}
+{{ form_end(formStudents) }}
+
+<br><br>
+
+{% if data is defined %}
+    {{data.id}}
+{%endif%}
+
+<h3>Klasa {{myClass.title}}</h3>
+<p>Przedmioty przypisane do klasy</p>
+{{dump(myClass.subjects)}}
+
+<br><br>
+
+<p>Uczniowie przypisani do klasy</p>
+{{dump(myClass.students)}}

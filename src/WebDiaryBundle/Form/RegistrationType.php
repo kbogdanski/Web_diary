@@ -8,7 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 class RegistrationType extends AbstractType {
     
     public function buildForm(FormBuilderInterface $builder, array $options) {
-
+        //dodaje pole z wyborem klasy przy rejestracji konta
+        //$builder->add('class', 'entity', array('class' => 'WebDiaryBundle:Classes', 'choice_label' => 'title', 'label' => 'Przypisz do klasy:'));
     }
 
     public function getParent() {

@@ -10,6 +10,8 @@ use WebDiaryBundle\Form\Type\ClassType;
 use WebDiaryBundle\Form\Type\SubjectType;
 use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
+use WebDiaryBundle\Entity\User;
+use WebDiaryBundle\Entity\Student_subjects;
 
 
 
@@ -63,11 +65,88 @@ class TeacherController extends Controller {
     
     
     /**
-     * @Route("/teacher/myClass")
+     * @Route("/teacher/myClass/{id}")
      * @Template()
      */
-    public function showMyClassAction() {
+    public function showMyClassAction(Request $req, $id) {
+        $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Classes');
+        $myClass = $rep->find($id);
         
+        $formSubjects = $this->createFormBuilder()
+            ->add('subject', 'entity', array('class' => 'WebDiaryBundle:Subjects', 'choice_label' => 'name', 'label' => 'Dodaj przedmiot do klasy: '))
+            ->add('save', 'submit', array('label' => 'Dodaj'))
+            ->getForm();
+        $formSubjects->handleRequest($req);
+        
+        $formStudents = $this->createFormBuilder()
+            ->add('student', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Dodaj ucznia do klasy: '))
+            ->add('save', 'submit', array('label' => 'Dodaj'))
+            ->getForm();
+        $formStudents->handleRequest($req);
+        
+        if ($req->getMethod() === 'POST') {
+            if ($formSubjects->isSubmitted() && $formSubjects->isValid()) {
+                $data = $formSubjects->getData();
+                $addSubject = $data['subject'];
+                
+                $countStudents = count($myClass->getStudents());
+                
+                if ($countStudents > 0) {
+                    $classStudents = $myClass->getStudents();
+                    for ($i=0; $i<$countStudents; $i++) {
+                        $studentSubject = new Student_subjects();
+                        $studentSubject->setStudent($classStudents[$i]);
+                        $studentSubject->setSubject($addSubject);
+                        
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($studentSubject);
+                        $em->flush();
+                    }
+                }
+                
+                $myClass->addSubject($addSubject);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($myClass);
+                $em->flush();
+
+                return $this->render('WebDiaryBundle:Teacher:showMyClass.html.twig', 
+                        array('myClass' => $myClass, 'formSubjects' => $formSubjects->createView(), 'formStudents' => $formStudents->createView()));
+            }
+
+            if ($formStudents->isSubmitted() && $formStudents->isValid()) {
+                $data = $formStudents->getData();
+                $addStudent = $data['student'];
+
+                $countSubjects = count($myClass->getSubjects());
+                
+                if ($countSubjects > 0) {
+                    $classSubjects = $myClass->getSubjects();
+                    for ($i=0; $i<$countSubjects; $i++) {
+                        $studentSubject = new Student_subjects();
+                        $studentSubject->setStudent($addStudent);
+                        $studentSubject->setSubject($classSubjects[$i]);
+                        
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($studentSubject);
+                        $em->flush();
+                    }
+                }
+                
+                $addStudent->setClass($myClass);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($addStudent);
+                $em->flush();
+                
+                return $this->render('WebDiaryBundle:Teacher:showMyClass.html.twig', 
+                        array('myClass' => $myClass, 'formSubjects' => $formSubjects->createView(), 'formStudents' => $formStudents->createView()));
+            }
+           
+            
+
+        }
+        
+        
+        return array('myClass' => $myClass, 'formSubjects' => $formSubjects->createView(), 'formStudents' => $formStudents->createView());
     }
 
     
