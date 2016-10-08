@@ -57,7 +57,7 @@ class TeacherController extends Controller {
                 $em->persist($class);
                 $em->flush();
 
-                return $this->redirectToRoute('fos_user_profile_show');
+                return $this->redirectToRoute('webdiary_teacher_index');
             }
         }
         return array('form' => $form->createView());
@@ -169,7 +169,7 @@ class TeacherController extends Controller {
                 $em->persist($subject);
                 $em->flush();
 
-                return $this->redirectToRoute('fos_user_profile_show');
+                return $this->redirectToRoute('webdiary_teacher_index');
             }
         }
         return array('form' => $form->createView());
