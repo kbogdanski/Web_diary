@@ -16,15 +16,20 @@
 
 <br><br>
 
-{% if data is defined %}
-    {{data.id}}
-{%endif%}
 
 <h3>Klasa {{myClass.title}}</h3>
 <p>Przedmioty przypisane do klasy</p>
-{{dump(myClass.subjects)}}
+{% for subject in myClass.subjects %}
+    {{subject.initials}} - {{subject.name}} <br>
+{%else%}
+    <p>Klasa nie ma jeszcze przypisanych przemiotów</p>
+{%endfor%}
 
 <br><br>
 
 <p>Uczniowie przypisani do klasy</p>
-{{dump(myClass.students)}}
+{% for student in myClass.students %}
+    {{student.username}}<br>
+{%else%}
+    <p>Klasa nie ma jeszcze przypisanych uczniow</p>
+{%endfor%}
