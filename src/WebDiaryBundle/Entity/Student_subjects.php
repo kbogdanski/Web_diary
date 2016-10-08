@@ -109,9 +109,9 @@ class Student_subjects
      * @param \DateTime $creationDate
      * @return Student_subjects
      */
-    public function setCreationDate($creationDate)
+    public function setCreationDate()
     {
-        $this->creationDate = $creationDate;
+        $this->creationDate = new \DateTime();
 
         return $this;
     }
