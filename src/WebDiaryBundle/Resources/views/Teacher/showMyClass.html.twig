@@ -1,4 +1,7 @@
 {# empty Twig template #}
+<script src="{{ asset('js/jquery-1.12.4.min.js') }}"></script>
+
+
 <h3>Widok szczegółowy klasy której użytkownik jest wychowawdzą</h3>
 
 {{ form_start(formSubjects) }}
@@ -20,7 +23,16 @@
 <h3>Klasa {{myClass.title}}</h3>
 <p>Przedmioty przypisane do klasy</p>
 {% for subject in myClass.subjects %}
-    {{subject.initials}} - {{subject.name}} - <a href="/teacher/addTeacher/{{subject.id}}">Przypisz nauczyciela</a><br>  
+    {{subject.initials}} - {{subject.name}} - 
+    {% if (subject.students is not null) %} 
+        {% if (subject.students[0].teacher is null) %}
+            <a href="/teacher/addTeacher/{{myClass.id}}/{{subject.id}}">Przypisz nauczyciela</a><br> 
+        {%else%}
+            Nauczyciel: {{subject.students[0].teacher.username}}<br>
+        {% endif %}
+    {%else%}
+        Klasa nie ma jeszcze uczniów
+    {% endif%}
 {%else%}
     <p>Klasa nie ma jeszcze przypisanych przemiotów</p>
 {%endfor%}

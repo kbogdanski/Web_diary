@@ -65,6 +65,31 @@ class TeacherController extends Controller {
     
     
     /**
+     * @Route("/teacher/addSubject")
+     * @Template()
+     */
+    public function addSubject(Request $req) {
+        $subject = new Subjects();
+        $form = $this->createForm(new SubjectType(), $subject);
+        $form->handleRequest($req);
+        
+        if ($req->getMethod() === 'POST') {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $subject = $form->getData();
+                $subject->setCreationDate();
+                
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($subject);
+                $em->flush();
+
+                return $this->redirectToRoute('webdiary_teacher_index');
+            }
+        }
+        return array('form' => $form->createView());
+    }
+    
+    
+    /**
      * @Route("/teacher/myClass/{id}")
      * @Template()
      */
@@ -101,32 +126,43 @@ class TeacherController extends Controller {
     }
 
     
-
     /**
-     * @Route("/teacher/addSubject")
+     * @Route("/teacher/addTeacher/{idClass}/{idSubject}")
      * @Template()
      */
-    public function addSubject(Request $req) {
-        $subject = new Subjects();
-        $form = $this->createForm(new SubjectType(), $subject);
-        $form->handleRequest($req);
+    public function addTeacherToSubjectAction(Request $req, $idClass, $idSubject) {
+        $formAddTeacherToSubject = $this->formAddTeacherToSubject();
+        $formAddTeacherToSubject->handleRequest($req);
         
         if ($req->getMethod() === 'POST') {
-            if ($form->isSubmitted() && $form->isValid()) {
-                $subject = $form->getData();
-                $subject->setCreationDate();
+            if ($formAddTeacherToSubject->isSubmitted() && $formAddTeacherToSubject->isValid()) {
+                $data = $formAddTeacherToSubject->getData();
+                $teacher = $data['teacher'];
+                $schoolYear = $data['school_year'];
                 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($subject);
-                $em->flush();
-
-                return $this->redirectToRoute('webdiary_teacher_index');
+                $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Subjects');
+                $subject = $rep->find($idSubject);
+                
+                $studentSubject = $subject->getStudents();
+                foreach ($studentSubject as $value) {
+                    if ($value->getStudent()->getClass()->getId() == $idClass) {
+                        $value->setSchoolYear($schoolYear);
+                        $value->setTeacher($teacher);
+                        
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($value);
+                        $em->flush();
+                    }
+                }
+                return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $idClass));
             }
         }
-        return array('form' => $form->createView());
+        return array('formAddTeacherToSubject' => $formAddTeacherToSubject->createView());
     }
-    
-    
+
+
+
+
     //PRIVATE FUNCTION
     private function addSubjectToClass($formSubjects, $myClass) {
         $data = $formSubjects->getData();
@@ -180,8 +216,8 @@ class TeacherController extends Controller {
         $em->flush();
     }
 
-
     
+
     //FORMULARZE
     private function formSubjects() {
         $formSubjects = $this->createFormBuilder()
@@ -199,12 +235,13 @@ class TeacherController extends Controller {
         return $formStudents;
     }
     
-    private function formTeachers() {
-        $formTeachers = $this->createFormBuilder()
+    private function formAddTeacherToSubject() {
+        $formAddTeacherToSubject = $this->createFormBuilder()
             ->add('teacher', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Dodaj nauczyciela przedmiotu: '))
+            ->add('school_year', 'text', array('label' => 'ROK SZKOLNY (np. 2016/2017): '))
             ->add('save', 'submit', array('label' => 'Dodaj'))
             ->getForm();
-        return $formTeachers;
+        return $formAddTeacherToSubject;
     }
     
 }
