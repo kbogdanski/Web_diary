@@ -51,7 +51,7 @@ class Rate_student_subject
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="Description_rates", inversedBy="studentSubjectHasThisRate")
+     * @ORM\ManyToOne(targetEntity="Description_rates", inversedBy="studentSubjectHasThisRates")
      * @ORM\JoinColumn(name="description_rate_id", referencedColumnName="id")
      */
     private $descriptionRate;

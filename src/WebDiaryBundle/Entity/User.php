@@ -24,7 +24,7 @@ class User extends BaseUser {
     /**
      * @ORM\OneToMany(targetEntity="Student_subjects", mappedBy="student")
      */
-    private $subjects;
+    private $studentSubjects;
 
     
     /**
@@ -41,16 +41,16 @@ class User extends BaseUser {
     
     
     /**
-     * @ORM\OneToMany(targetEntity="Student_subjects", mappedBy="teacher")
+     * @ORM\OneToMany(targetEntity="Class_subjects", mappedBy="subjectTeacher")
      */
-    private $studentSubjectTeachers;
+    private $subjectClassTeachers;
 
 
     public function __construct() {
         parent::__construct();
-        $this->subjects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->studentSubjects = new \Doctrine\Common\Collections\ArrayCollection();
         $this->classTeachers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->studentSubjectTeachers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subjectClassTeachers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -196,5 +196,71 @@ class User extends BaseUser {
     public function getStudentSubjectTeachers()
     {
         return $this->studentSubjectTeachers;
+    }
+
+    /**
+     * Add studentSubjects
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $studentSubjects
+     * @return User
+     */
+    public function addStudentSubject(\WebDiaryBundle\Entity\Student_subjects $studentSubjects)
+    {
+        $this->studentSubjects[] = $studentSubjects;
+
+        return $this;
+    }
+
+    /**
+     * Remove studentSubjects
+     *
+     * @param \WebDiaryBundle\Entity\Student_subjects $studentSubjects
+     */
+    public function removeStudentSubject(\WebDiaryBundle\Entity\Student_subjects $studentSubjects)
+    {
+        $this->studentSubjects->removeElement($studentSubjects);
+    }
+
+    /**
+     * Get studentSubjects
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStudentSubjects()
+    {
+        return $this->studentSubjects;
+    }
+
+    /**
+     * Add subjectClassTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Class_subjects $subjectClassTeachers
+     * @return User
+     */
+    public function addSubjectClassTeacher(\WebDiaryBundle\Entity\Class_subjects $subjectClassTeachers)
+    {
+        $this->subjectClassTeachers[] = $subjectClassTeachers;
+
+        return $this;
+    }
+
+    /**
+     * Remove subjectClassTeachers
+     *
+     * @param \WebDiaryBundle\Entity\Class_subjects $subjectClassTeachers
+     */
+    public function removeSubjectClassTeacher(\WebDiaryBundle\Entity\Class_subjects $subjectClassTeachers)
+    {
+        $this->subjectClassTeachers->removeElement($subjectClassTeachers);
+    }
+
+    /**
+     * Get subjectClassTeachers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubjectClassTeachers()
+    {
+        return $this->subjectClassTeachers;
     }
 }

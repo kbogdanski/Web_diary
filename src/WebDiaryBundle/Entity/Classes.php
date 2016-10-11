@@ -49,17 +49,16 @@ class Classes
     private $students;
     
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="classTeacher")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="classTeachers")
      * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
      */
     private $teacher;
     
     
     /**
-     * @ORM\ManyToMany(targetEntity="Subjects", inversedBy="classes")
-     * @ORM\JoinTable(name="class_subjects")
+     * @ORM\OneToMany(targetEntity="Class_subjects", mappedBy="class")
      */
-    private $subjects;
+    private $classSubjects;
 
 
     /**
@@ -146,7 +145,7 @@ class Classes
     public function __construct()
     {
         $this->students = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subjects = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classSubjects = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -236,5 +235,38 @@ class Classes
     public function getTeacher()
     {
         return $this->teacher;
+    }
+
+    /**
+     * Add classSubjects
+     *
+     * @param \WebDiaryBundle\Entity\Class_subjects $classSubjects
+     * @return Classes
+     */
+    public function addClassSubject(\WebDiaryBundle\Entity\Class_subjects $classSubjects)
+    {
+        $this->classSubjects[] = $classSubjects;
+
+        return $this;
+    }
+
+    /**
+     * Remove classSubjects
+     *
+     * @param \WebDiaryBundle\Entity\Class_subjects $classSubjects
+     */
+    public function removeClassSubject(\WebDiaryBundle\Entity\Class_subjects $classSubjects)
+    {
+        $this->classSubjects->removeElement($classSubjects);
+    }
+
+    /**
+     * Get classSubjects
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClassSubjects()
+    {
+        return $this->classSubjects;
     }
 }

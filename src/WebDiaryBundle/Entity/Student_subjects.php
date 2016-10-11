@@ -28,12 +28,6 @@ class Student_subjects
      */
     private $description;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="school_year", type="string", length=9)
-     */
-    private $schoolYear ;
 
     /**
      * @var \DateTime
@@ -50,7 +44,7 @@ class Student_subjects
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="subjects")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="studentSubjects")
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id")
      */
     private $student;
@@ -62,12 +56,6 @@ class Student_subjects
      */
     private $subject;
     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="studentSubjectTeachers")
-     * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
-     */
-    private $teacher;
     
 
     /**

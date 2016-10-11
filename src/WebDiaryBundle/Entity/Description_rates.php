@@ -39,7 +39,7 @@ class Description_rates
     /**
      * @ORM\OneToMany(targetEntity="Rate_student_subject", mappedBy="descriptionRate")
      */
-    private $studentSubjectHasThisRate;
+    private $studentSubjectHasThisRates;
     
 
     /**
@@ -102,7 +102,7 @@ class Description_rates
      */
     public function __construct()
     {
-        $this->studentSubjectHasThisRate = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->studentSubjectHasThisRates = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -113,7 +113,7 @@ class Description_rates
      */
     public function addStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
     {
-        $this->studentSubjectHasThisRate[] = $studentSubjectHasThisRate;
+        $this->studentSubjectHasThisRates[] = $studentSubjectHasThisRate;
 
         return $this;
     }
@@ -125,16 +125,17 @@ class Description_rates
      */
     public function removeStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
     {
-        $this->studentSubjectHasThisRate->removeElement($studentSubjectHasThisRate);
+        $this->studentSubjectHasThisRates->removeElement($studentSubjectHasThisRate);
     }
 
+
     /**
-     * Get studentSubjectHasThisRate
+     * Get studentSubjectHasThisRates
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getStudentSubjectHasThisRate()
+    public function getStudentSubjectHasThisRates()
     {
-        return $this->studentSubjectHasThisRate;
+        return $this->studentSubjectHasThisRates;
     }
 }

@@ -57,7 +57,7 @@ class Subjects
     
     
     /**
-     * @ORM\ManyToMany(targetEntity="Classes", mappedBy="subjects")
+     * @ORM\OneToMany(targetEntity="Class_subjects", mappedBy="subject")
      */
     private $classes;
     
