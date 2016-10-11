@@ -35,9 +35,9 @@
 
 <div>
     <h1>Przedmioty które uczę</h1>
-    {% for studentSubject in user.studentSubjectTeachers %}
-        <p><a href="">{{studentSubject.subject.initials}} - {{studentSubject.subject.name}}</a></p>
+    {% for subjectClassTeacher in user.subjectClassTeachers %}
+        <p><a href="">{{subjectClassTeacher.subject.initials}} - {{subjectClassTeacher.subject.name}}</a></p>
     {%else%}
-        {{myClasses}}
+        <p>Brak przedmiotów które uczę</p>
     {%endfor%}
 </div>
