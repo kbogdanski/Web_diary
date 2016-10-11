@@ -106,20 +106,12 @@ class TeacherController extends Controller {
         if ($req->getMethod() === 'POST') {
             if ($formSubjects->isSubmitted() && $formSubjects->isValid()) {
                 $this->addSubjectToClass($formSubjects, $myClass);
-
-                return $this->render('WebDiaryBundle:Teacher:showMyClass.html.twig', 
-                        array('myClass' => $myClass, 
-                            'formSubjects' => $formSubjects->createView(), 
-                            'formStudents' => $formStudents->createView()));
+                return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $id));
             }
 
             if ($formStudents->isSubmitted() && $formStudents->isValid()) {
                 $this->addStudentToClass($formStudents, $myClass);
-                
-                return $this->render('WebDiaryBundle:Teacher:showMyClass.html.twig', 
-                        array('myClass' => $myClass, 
-                            'formSubjects' => $formSubjects->createView(), 
-                            'formStudents' => $formStudents->createView()));
+                return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $id));
             }
         }
         return array('myClass' => $myClass, 'formSubjects' => $formSubjects->createView(), 'formStudents' => $formStudents->createView());
@@ -168,52 +160,71 @@ class TeacherController extends Controller {
         $data = $formSubjects->getData();
         $addSubject = $data['subject'];
 
-        $countStudents = count($myClass->getStudents());
-
-        if ($countStudents > 0) {
-            $classStudents = $myClass->getStudents();
-            for ($i=0; $i<$countStudents; $i++) {
-                $studentSubject = new Student_subjects();
-                $studentSubject->setStudent($classStudents[$i]);
-                $studentSubject->setSubject($addSubject);
-                $studentSubject->setCreationDate();
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($studentSubject);
-                $em->flush();
+        $subjectInClass = $myClass->getSubjects();
+        $flag = 1;
+        foreach ($subjectInClass as $subject) {
+            if ($subject->getId() == $addSubject->getId()) {
+                $flag = 0;
+                break;
             }
         }
+        
+        if ($flag) {
+            $countStudents = count($myClass->getStudents());
+            if ($countStudents > 0) {
+                $classStudents = $myClass->getStudents();
+                for ($i=0; $i<$countStudents; $i++) {
+                    $studentSubject = new Student_subjects();
+                    $studentSubject->setStudent($classStudents[$i]);
+                    $studentSubject->setSubject($addSubject);
+                    $studentSubject->setCreationDate();
 
-        $myClass->addSubject($addSubject);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($myClass);
-        $em->flush();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($studentSubject);
+                    $em->flush();
+                }
+            }
+            $myClass->addSubject($addSubject);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($myClass);
+            $em->flush();
+        }
     }
     
     private function addStudentToClass($formStudents, $myClass) {
         $data = $formStudents->getData();
         $addStudent = $data['student'];
 
-        $countSubjects = count($myClass->getSubjects());
-
-        if ($countSubjects > 0) {
-            $classSubjects = $myClass->getSubjects();
-            for ($i=0; $i<$countSubjects; $i++) {
-                $studentSubject = new Student_subjects();
-                $studentSubject->setStudent($addStudent);
-                $studentSubject->setSubject($classSubjects[$i]);
-                $studentSubject->setCreationDate();
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($studentSubject);
-                $em->flush();
+        $studentInClass = $myClass->getStudents();
+        $flag = 1;
+        foreach ($studentInClass as $student) {
+            if ($student->getId() == $addStudent->getId()) {
+                $flag = 0;
+                break;
             }
         }
+        
+        if ($flag) {
+            $countSubjects = count($myClass->getSubjects());
+            if ($countSubjects > 0) {
+                $classSubjects = $myClass->getSubjects();
+                for ($i=0; $i<$countSubjects; $i++) {
+                    $studentSubject = new Student_subjects();
+                    $studentSubject->setStudent($addStudent);
+                    $studentSubject->setSubject($classSubjects[$i]);
+                    $studentSubject->setCreationDate();
 
-        $addStudent->setClass($myClass);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($addStudent);
-        $em->flush();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($studentSubject);
+                    $em->flush();
+                }
+            }
+
+            $addStudent->setClass($myClass);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($addStudent);
+            $em->flush();
+        }
     }
 
     

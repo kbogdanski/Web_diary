@@ -32,3 +32,12 @@
         {{myClasses}}
     {%endfor%}
 </div>
+
+<div>
+    <h1>Przedmioty które uczę</h1>
+    {% for studentSubject in user.studentSubjectTeachers %}
+        <p><a href="">{{studentSubject.subject.initials}} - {{studentSubject.subject.name}}</a></p>
+    {%else%}
+        {{myClasses}}
+    {%endfor%}
+</div>
