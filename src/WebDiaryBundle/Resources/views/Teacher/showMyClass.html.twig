@@ -4,35 +4,30 @@
 
 <h3>Widok szczegółowy klasy której użytkownik jest wychowawdzą</h3>
 
-{{ form_start(formSubjects) }}
-{{ form_label(formSubjects.subject) }}
-{{ form_widget(formSubjects.subject) }}
-{{ form_widget(formSubjects.save) }}
-{{ form_end(formSubjects) }}
+{{ form_start(formSubjectToClass) }}
+{{ form_label(formSubjectToClass.subject) }}
+{{ form_widget(formSubjectToClass.subject) }}
+{{ form_label(formSubjectToClass.teacher) }}
+{{ form_widget(formSubjectToClass.teacher) }}
+{{ form_label(formSubjectToClass.school_year) }}
+{{ form_widget(formSubjectToClass.school_year) }}
+{{ form_widget(formSubjectToClass.save) }}
+{{ form_end(formSubjectToClass) }}
 
 
-{{ form_start(formStudents) }}
-{{ form_label(formStudents.student) }}
-{{ form_widget(formStudents.student) }}
-{{ form_widget(formStudents.save) }}
-{{ form_end(formStudents) }}
+{{ form_start(formStudentToClass) }}
+{{ form_label(formStudentToClass.student) }}
+{{ form_widget(formStudentToClass.student) }}
+{{ form_widget(formStudentToClass.save) }}
+{{ form_end(formStudentToClass) }}
 
 <br><br>
 
 
 <h3>Klasa {{myClass.title}}</h3>
 <p>Przedmioty przypisane do klasy</p>
-{% for subject in myClass.subjects %}
-    {{subject.initials}} - {{subject.name}} - 
-    {% if (subject.students is not null) %} 
-        {% if (subject.students[0].teacher is null) %}
-            <a href="/teacher/addTeacher/{{myClass.id}}/{{subject.id}}">Przypisz nauczyciela</a><br> 
-        {%else%}
-            Nauczyciel: {{subject.students[0].teacher.username}}<br>
-        {% endif %}
-    {%else%}
-        Klasa nie ma jeszcze uczniów
-    {% endif%}
+{% for classSubject in myClass.classSubjects %}
+    {{classSubject.subject.initials}} - {{classSubject.subject.name}} - Nauczyciel: {{classSubject.subjectTeacher.username}} <br>
 {%else%}
     <p>Klasa nie ma jeszcze przypisanych przemiotów</p>
 {%endfor%}

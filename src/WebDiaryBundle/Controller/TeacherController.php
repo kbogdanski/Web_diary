@@ -12,6 +12,7 @@ use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
 use WebDiaryBundle\Entity\User;
 use WebDiaryBundle\Entity\Student_subjects;
+use WebDiaryBundle\Entity\Class_subjects;
 
 
 
@@ -97,70 +98,36 @@ class TeacherController extends Controller {
         $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Classes');
         $myClass = $rep->find($id);
         
-        $formSubjects = $this->formSubjects();
-        $formSubjects->handleRequest($req);
+        $formSubjectToClass = $this->formSubjectToClass();
+        $formSubjectToClass->handleRequest($req);
         
-        $formStudents = $this->formStudents();
-        $formStudents->handleRequest($req);
+        $formStudentToClass = $this->formStudentToClass();
+        $formStudentToClass->handleRequest($req);
         
         if ($req->getMethod() === 'POST') {
-            if ($formSubjects->isSubmitted() && $formSubjects->isValid()) {
-                $this->addSubjectToClass($formSubjects, $myClass);
+            if ($formSubjectToClass->isSubmitted() && $formSubjectToClass->isValid()) {
+                $this->addSubjectToClass($formSubjectToClass, $myClass);
                 return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $id));
             }
 
-            if ($formStudents->isSubmitted() && $formStudents->isValid()) {
-                $this->addStudentToClass($formStudents, $myClass);
+            if ($formStudentToClass->isSubmitted() && $formStudentToClass->isValid()) {
+                $this->addStudentToClass($formStudentToClass, $myClass);
                 return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $id));
             }
         }
-        return array('myClass' => $myClass, 'formSubjects' => $formSubjects->createView(), 'formStudents' => $formStudents->createView());
+        return array('myClass' => $myClass, 'formSubjectToClass' => $formSubjectToClass->createView(), 'formStudentToClass' => $formStudentToClass->createView());
     }
 
     
-    /**
-     * @Route("/teacher/addTeacher/{idClass}/{idSubject}")
-     * @Template()
-     */
-    public function addTeacherToSubjectAction(Request $req, $idClass, $idSubject) {
-        $formAddTeacherToSubject = $this->formAddTeacherToSubject();
-        $formAddTeacherToSubject->handleRequest($req);
-        
-        if ($req->getMethod() === 'POST') {
-            if ($formAddTeacherToSubject->isSubmitted() && $formAddTeacherToSubject->isValid()) {
-                $data = $formAddTeacherToSubject->getData();
-                $teacher = $data['teacher'];
-                $schoolYear = $data['school_year'];
-                
-                $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Subjects');
-                $subject = $rep->find($idSubject);
-                
-                $studentSubject = $subject->getStudents();
-                foreach ($studentSubject as $value) {
-                    if ($value->getStudent()->getClass()->getId() == $idClass) {
-                        $value->setSchoolYear($schoolYear);
-                        $value->setTeacher($teacher);
-                        
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($value);
-                        $em->flush();
-                    }
-                }
-                return $this->redirectToRoute('webdiary_teacher_showmyclass', array('id' => $idClass));
-            }
-        }
-        return array('formAddTeacherToSubject' => $formAddTeacherToSubject->createView());
-    }
-
-
-
-
+    
     //PRIVATE FUNCTION
-    private function addSubjectToClass($formSubjects, $myClass) {
-        $data = $formSubjects->getData();
+    private function addSubjectToClass($formSubjectToClass, $myClass) {
+        $data = $formSubjectToClass->getData();
         $addSubject = $data['subject'];
+        $addTeacher = $data['teacher'];
+        $addSchoolYear = $data['school_year'];
 
-        $subjectInClass = $myClass->getSubjects();
+        $subjectInClass = $myClass->getClassSubjects();
         $flag = 1;
         foreach ($subjectInClass as $subject) {
             if ($subject->getId() == $addSubject->getId()) {
@@ -184,15 +151,22 @@ class TeacherController extends Controller {
                     $em->flush();
                 }
             }
-            $myClass->addSubject($addSubject);
+            
+            $classSubject = new Class_subjects();
+            $classSubject->setSubjectTeacher($addTeacher);
+            $classSubject->setClass($myClass);
+            $classSubject->setSubject($addSubject);
+            $classSubject->setSchoolYear($addSchoolYear);
+            $classSubject->setCreationDate();
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($myClass);
+            $em->persist($classSubject);
             $em->flush();
         }
     }
     
-    private function addStudentToClass($formStudents, $myClass) {
-        $data = $formStudents->getData();
+    private function addStudentToClass($formStudentToClass, $myClass) {
+        $data = $formStudentToClass->getData();
         $addStudent = $data['student'];
 
         $studentInClass = $myClass->getStudents();
@@ -205,13 +179,13 @@ class TeacherController extends Controller {
         }
         
         if ($flag) {
-            $countSubjects = count($myClass->getSubjects());
+            $countSubjects = count($myClass->getClassSubjects());
             if ($countSubjects > 0) {
-                $classSubjects = $myClass->getSubjects();
+                $classSubjects = $myClass->getClassSubjects();
                 for ($i=0; $i<$countSubjects; $i++) {
                     $studentSubject = new Student_subjects();
                     $studentSubject->setStudent($addStudent);
-                    $studentSubject->setSubject($classSubjects[$i]);
+                    $studentSubject->setSubject($classSubjects[$i]->getSubject());
                     $studentSubject->setCreationDate();
 
                     $em = $this->getDoctrine()->getManager();
@@ -230,29 +204,23 @@ class TeacherController extends Controller {
     
 
     //FORMULARZE
-    private function formSubjects() {
-        $formSubjects = $this->createFormBuilder()
+    private function formSubjectToClass() {
+        $formSubjectToClass = $this->createFormBuilder()
             ->add('subject', 'entity', array('class' => 'WebDiaryBundle:Subjects', 'choice_label' => 'name', 'label' => 'Dodaj przedmiot do klasy: '))
-            ->add('save', 'submit', array('label' => 'Dodaj'))
-            ->getForm();
-       return  $formSubjects;
-    }
-    
-    private function formStudents() {
-        $formStudents = $this->createFormBuilder()
-            ->add('student', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Dodaj ucznia do klasy: '))
-            ->add('save', 'submit', array('label' => 'Dodaj'))
-            ->getForm();
-        return $formStudents;
-    }
-    
-    private function formAddTeacherToSubject() {
-        $formAddTeacherToSubject = $this->createFormBuilder()
-            ->add('teacher', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Dodaj nauczyciela przedmiotu: '))
+            ->add('teacher', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Nauczyciel przedmiotu: '))
             ->add('school_year', 'text', array('label' => 'ROK SZKOLNY (np. 2016/2017): '))
             ->add('save', 'submit', array('label' => 'Dodaj'))
             ->getForm();
-        return $formAddTeacherToSubject;
+       return  $formSubjectToClass;
     }
+    
+    private function formStudentToClass() {
+        $formStudentToClass = $this->createFormBuilder()
+            ->add('student', 'entity', array('class' => 'WebDiaryBundle:User', 'choice_label' => 'username', 'label' => 'Dodaj ucznia do klasy: '))
+            ->add('save', 'submit', array('label' => 'Dodaj'))
+            ->getForm();
+        return $formStudentToClass;
+    }
+    
     
 }

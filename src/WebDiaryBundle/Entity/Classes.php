@@ -181,38 +181,6 @@ class Classes
         return $this->students;
     }
 
-    /**
-     * Add subjects
-     *
-     * @param \WebDiaryBundle\Entity\Subjects $subjects
-     * @return Classes
-     */
-    public function addSubject(\WebDiaryBundle\Entity\Subjects $subjects)
-    {
-        $this->subjects[] = $subjects;
-
-        return $this;
-    }
-
-    /**
-     * Remove subjects
-     *
-     * @param \WebDiaryBundle\Entity\Subjects $subjects
-     */
-    public function removeSubject(\WebDiaryBundle\Entity\Subjects $subjects)
-    {
-        $this->subjects->removeElement($subjects);
-    }
-
-    /**
-     * Get subjects
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSubjects()
-    {
-        return $this->subjects;
-    }
 
     /**
      * Set teacher
