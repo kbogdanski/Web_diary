@@ -119,9 +119,9 @@ class Rate_student_subject
      * @param \DateTime $date
      * @return Rate_student_subject
      */
-    public function setDate($date)
+    public function setDate()
     {
-        $this->date = $date;
+        $this->date = new \Date;
 
         return $this;
     }

@@ -20,6 +20,15 @@ Przedmiot: {{subject.name}} <br>
             <td>Brak ocen</td>
         {%endfor%}
         <td><button class="addRate">Wstaw ocene</button></td>
+        <td style="display: none">
+            <form>
+                OCENA:
+                <input type="number" name="firstname">
+                NOTATKA:
+                <input type="text" name="lastname">
+                <input type="submit" value="Dodaj">
+            </form>
+        </td>
     </tr>
 
 {%else%}

@@ -8,12 +8,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use WebDiaryBundle\Form\Type\ClassType;
 use WebDiaryBundle\Form\Type\SubjectType;
+use WebDiaryBundle\Form\Type\Rate_student_subjectType;
 use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
 use WebDiaryBundle\Entity\User;
 use WebDiaryBundle\Entity\Student_subjects;
 use WebDiaryBundle\Entity\Student_subjectsRepository;
 use WebDiaryBundle\Entity\Class_subjects;
+use WebDiaryBundle\Entity\Rate_student_subject;
 
 
 
@@ -124,7 +126,7 @@ class TeacherController extends Controller {
      * @Route("/teacher/subject/{idClass}/{idSubject}")
      * @Template()
      */
-    public function showSubjectAction($idClass, $idSubject) {
+    public function showSubjectAction(Request $req, $idClass, $idSubject) {
         $repClass = $this->getDoctrine()->getRepository('WebDiaryBundle:Classes');
         $class = $repClass->find($idClass);
         
@@ -133,18 +135,6 @@ class TeacherController extends Controller {
         
         $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Student_subjects');
         $studentSubjects = $rep->getSubjectClassStudents($idSubject, $idClass);
-        
-        //var_dump($studentSubjects);
-        /*$result = [];
-        
-        for ($i=0; $i<count($studentSubjects); $i++) {
-            $student = $studentSubjects[$i]->getStudent();
-            if ($student->getClass() == $class) {
-                $result[] = $studentSubjects[$i];
-            }
-        }
-        
-        var_dump($result);*/
         
         return array('class' => $class, 'subject' => $subject, 'studentSubjects' => $studentSubjects);
     }
