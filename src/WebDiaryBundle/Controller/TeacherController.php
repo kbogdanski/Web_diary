@@ -12,6 +12,7 @@ use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
 use WebDiaryBundle\Entity\User;
 use WebDiaryBundle\Entity\Student_subjects;
+use WebDiaryBundle\Entity\Student_subjectsRepository;
 use WebDiaryBundle\Entity\Class_subjects;
 
 
@@ -117,9 +118,41 @@ class TeacherController extends Controller {
         }
         return array('myClass' => $myClass, 'formSubjectToClass' => $formSubjectToClass->createView(), 'formStudentToClass' => $formStudentToClass->createView());
     }
+    
+    
+    /**
+     * @Route("/teacher/subject/{idClass}/{idSubject}")
+     * @Template()
+     */
+    public function showSubjectAction($idClass, $idSubject) {
+        $repClass = $this->getDoctrine()->getRepository('WebDiaryBundle:Classes');
+        $class = $repClass->find($idClass);
+        
+        $repSubject = $this->getDoctrine()->getRepository('WebDiaryBundle:Subjects');
+        $subject = $repSubject->find($idSubject);
+        
+        $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Student_subjects');
+        $studentSubjects = $rep->getSubjectClassStudents($idSubject, $idClass);
+        
+        //var_dump($studentSubjects);
+        /*$result = [];
+        
+        for ($i=0; $i<count($studentSubjects); $i++) {
+            $student = $studentSubjects[$i]->getStudent();
+            if ($student->getClass() == $class) {
+                $result[] = $studentSubjects[$i];
+            }
+        }
+        
+        var_dump($result);*/
+        
+        return array('class' => $class, 'subject' => $subject, 'studentSubjects' => $studentSubjects);
+    }
 
-    
-    
+
+
+
+
     //PRIVATE FUNCTION
     private function addSubjectToClass($formSubjectToClass, $myClass) {
         $data = $formSubjectToClass->getData();

@@ -1,0 +1,29 @@
+{# empty Twig template #}
+<script src="{{ asset('js/jquery-1.12.4.min.js') }}"></script>
+<script src="{{ asset('js/ajax.js') }}"></script>
+
+KLASA: {{class.title}} <br>
+Przedmiot: {{subject.name}} <br>
+
+<br><br>
+
+<h3>Uczniowie:</h3>
+
+<table>
+
+{%for studentSubject in studentSubjects %}
+    <tr>
+        <td>{{studentSubject.student.username}}</td>
+        {%for rate in studentSubject.rates%}
+            <td>rate.rate - rate.$descriptionRate.description</td>
+        {%else%}
+            <td>Brak ocen</td>
+        {%endfor%}
+        <td><button class="addRate">Wstaw ocene</button></td>
+    </tr>
+
+{%else%}
+    </table>
+    <p>Brak uczniów w klasie</p> 
+{%endfor%}
+
