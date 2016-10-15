@@ -14,18 +14,18 @@ Przedmiot: {{subject.name}} <br>
 {%for studentSubject in studentSubjects %}
     <tr>
         <td>{{studentSubject.student.username}}</td>
-        {%for rate in studentSubject.rates%}
-            <td>rate.rate - rate.$descriptionRate.description</td>
+        {%for rate in studentSubject.rates %}
+            <td> {{ rate.rate }} - {{ rate.descriptionRate.description }}</td>
         {%else%}
             <td>Brak ocen</td>
         {%endfor%}
         <td><button class="addRate">Wstaw ocene</button></td>
         <td style="display: none">
-            <form>
+            <form class="addRateForm" action=" {{ path('webdiary_teacher_addratetostudent') }}" data-id="{{ studentSubject.id }}">
                 OCENA:
-                <input type="number" name="firstname">
+                <input type="number" class="rateInput">
                 NOTATKA:
-                <input type="text" name="lastname">
+                <input type="text" class="descriptionInput">
                 <input type="submit" value="Dodaj">
             </form>
         </td>

@@ -106,26 +106,26 @@ class Description_rates
     }
 
     /**
-     * Add studentSubjectHasThisRate
+     * Add studentSubjectHasThisRates
      *
-     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate
+     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRates
      * @return Description_rates
      */
-    public function addStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
+    public function addStudentSubjectHasThisRates(\WebDiaryBundle\Entity\Rate_student_subject $studentSubjectHasThisRates)
     {
-        $this->studentSubjectHasThisRates[] = $studentSubjectHasThisRate;
+        $this->studentSubjectHasThisRates[] = $studentSubjectHasThisRates;
 
         return $this;
     }
 
     /**
-     * Remove studentSubjectHasThisRate
+     * Remove studentSubjectHasThisRates
      *
-     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate
+     * @param \WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRates
      */
-    public function removeStudentSubjectHasThisRate(\WebDiaryBundle\Entity\Rate_student_subjects $studentSubjectHasThisRate)
+    public function removeStudentSubjectHasThisRates(\WebDiaryBundle\Entity\Rate_student_subject $studentSubjectHasThisRates)
     {
-        $this->studentSubjectHasThisRates->removeElement($studentSubjectHasThisRate);
+        $this->studentSubjectHasThisRates->removeElement($studentSubjectHasThisRates);
     }
 
 

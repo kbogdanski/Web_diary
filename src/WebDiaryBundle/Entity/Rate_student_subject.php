@@ -121,7 +121,7 @@ class Rate_student_subject
      */
     public function setDate()
     {
-        $this->date = new \Date;
+        $this->date = new \DateTime;
 
         return $this;
     }

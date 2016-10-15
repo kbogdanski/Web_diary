@@ -6,9 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use WebDiaryBundle\Form\Type\ClassType;
 use WebDiaryBundle\Form\Type\SubjectType;
-use WebDiaryBundle\Form\Type\Rate_student_subjectType;
 use WebDiaryBundle\Entity\Classes;
 use WebDiaryBundle\Entity\Subjects;
 use WebDiaryBundle\Entity\User;
@@ -16,6 +17,7 @@ use WebDiaryBundle\Entity\Student_subjects;
 use WebDiaryBundle\Entity\Student_subjectsRepository;
 use WebDiaryBundle\Entity\Class_subjects;
 use WebDiaryBundle\Entity\Rate_student_subject;
+use WebDiaryBundle\Entity\Description_rates;
 
 
 
@@ -138,6 +140,35 @@ class TeacherController extends Controller {
         
         return array('class' => $class, 'subject' => $subject, 'studentSubjects' => $studentSubjects);
     }
+    
+    /**
+     * @Route("/teacher/addRateToStudent")
+     * @Template()
+     */
+    public function addRateToStudentAction(Request $req) {
+        $rate = $req->request->get('rate');
+        $description = $req->request->get('description');
+        $id = $req->request->get('id');
+        
+        $repStudentSubject = $this->getDoctrine()->getRepository('WebDiaryBundle:Student_subjects');
+        $studentSubject = $repStudentSubject->findOneById($id);
+        
+        $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Description_rates');
+        $descriptionRate = $rep->findOneByRate($rate);
+        
+        $newRate = new Rate_student_subject();
+        $newRate->setDate();
+        $newRate->setRate($rate);
+        $newRate->setDescription($description);
+        $newRate->setStudentSubject($studentSubject);
+        $newRate->setDescriptionRate($descriptionRate);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newRate);
+        $em->flush();
+        
+        return new JsonResponse(array('rate' => $rate, 'description' => $description));
+    }
 
 
 
@@ -222,6 +253,17 @@ class TeacherController extends Controller {
             $em->persist($addStudent);
             $em->flush();
         }
+    }
+    
+    private function findDescriptionRate($rate) {
+        $rep = $this->getDoctrine()->getRepository('WebDiaryBundle:Description_rates');
+        $descriptionRate = $rep->findByRate($rate);
+        
+        if (isset($descriptionRate)) {
+            return $descriptionRate;
+        }
+        
+        return new Description_rates();
     }
 
     
