@@ -1,6 +1,7 @@
-{# empty Twig template #}
-<script src="{{ asset('js/jquery-1.12.4.min.js') }}"></script>
+{% extends "::base.html.twig" %}
 
+
+{% block body %}
 
 <h3>Widok szczegółowy klasy której użytkownik jest wychowawdzą</h3>
 
@@ -40,3 +41,5 @@
 {%else%}
     <p>Klasa nie ma jeszcze przypisanych uczniow</p>
 {%endfor%}
+
+{% endblock %}

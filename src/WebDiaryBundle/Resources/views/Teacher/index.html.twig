@@ -1,5 +1,8 @@
+{% extends "::base.html.twig" %}
+
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block right_column %}
 <div>
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
@@ -14,9 +17,12 @@
 <div class="fos_user_user_show">
     <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
     <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
-    
-    <br><br>
-    
+</div>
+{% endblock %}
+
+{% block body %}
+
+<div>
     <p>Jesteś na widoku index.html.twig - jesteś zalogowany</p>
     <a href="/teacher/addClass">Stwórz klase</a><br>
     <a href="/register/">Załóż konto ucznia</a><br>
@@ -41,3 +47,5 @@
         <p>Brak przedmiotów które uczę</p>
     {%endfor%}
 </div>
+
+{% endblock %}
